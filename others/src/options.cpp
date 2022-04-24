@@ -24,5 +24,5 @@ bool is_predictor=false;
 bool is_predictorKalman=false;
 bool is_predictorEKF=false;
 int shoot_delay_t=200;
-int robot_speed_mps=5;
+int robot_speed_mps=15;
 int enemy_color=ENEMY_RED;

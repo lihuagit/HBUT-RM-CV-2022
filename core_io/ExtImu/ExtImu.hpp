@@ -53,6 +53,8 @@ public:
     void periodic_trigger(int32_t period_ms);
 
     void read_sensor(sensor_data *p_data);
+
+    int read_word_yaw(char* p_data, size_t size);
 };
 
 #endif /* _EXTIMU_HPP_ */

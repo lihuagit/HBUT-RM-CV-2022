@@ -27,3 +27,7 @@ void ExtImu::periodic_trigger(int32_t period_ms) {
 void ExtImu::read_sensor(sensor_data *p_data) {
     Serial::read((uint8_t *) p_data, sizeof(sensor_data));
 }
+
+int ExtImu::read_word_yaw(char* p_data, size_t size) {
+    return Serial::read((uint8_t *) p_data, size);
+}

@@ -15,7 +15,8 @@ int main(){
     printf("main start!!!\n");
     // background_sensors_io_video_auto_restart(PROJECT_DIR"/video/8-11东大3No.4-装甲板-1.mp4");
     // background_sensors_io_video_auto_restart(PROJECT_DIR"/video/8-11东大3No.4.mp4");
-    background_sensors_io_video_auto_restart(PROJECT_DIR"/video/red_3.mp4");
+    // background_sensors_io_video_auto_restart(PROJECT_DIR"/video/red_3.mp4");
+    background_sensors_io_auto_restart("camera_1",PROJECT_DIR"/asset/armor_lihua_3.config",PROJECT_DIR"/asset/camera-param.yml","USB VID:PID=0483:5740 SNR=207233AB374E",10);
     // background_find_light_blobs_run();
     background_find_armor_boxs_run(PROJECT_DIR"/asset/para/");
     background_none_predict_run();

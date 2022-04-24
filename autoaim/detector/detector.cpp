@@ -151,7 +151,7 @@ void find_armor_boxs_run(const string &paras_folder) {
     while (true) {
         try {
             /// 获取数据
-            const auto& [img, q, timestamp] = sensor_sub.pop_for(10);
+            const auto& [img, q, timestamp] = sensor_sub.pop_for(50);
 
             // 使用KCFTracker进行追踪
             auto pos = *(roi_rect);
@@ -185,6 +185,8 @@ void find_armor_boxs_run(const string &paras_folder) {
 
             auto detection = findArmorBox_3(roi,light_blobs,classifier);
 
+            double img_w2=img.cols/2;
+            double img_h2=img.rows/2;
             /* publish detection results */
             if (detection.tag_id!=0) {
 
@@ -193,8 +195,8 @@ void find_armor_boxs_run(const string &paras_folder) {
                 detection.rect.y += bigger_rect.y;
 
                 for(int i=0;i<4;i++){
-                    detection.pts[i].x+=bigger_rect.x;
-                    detection.pts[i].y+=bigger_rect.y;
+                    detection.pts[i].x+=bigger_rect.x-img_w2;
+                    detection.pts[i].y+=bigger_rect.y-img_h2;
                 }
 
                 // 更新tracker
@@ -215,19 +217,27 @@ void find_armor_boxs_run(const string &paras_folder) {
                 
             if(show_armor_boxes){
                 cv::Mat im2show = img.clone();
+                for(int i=0;i<4;i++){
+                    detection.pts[i].x+=img_w2;
+                    detection.pts[i].y+=img_h2;
+                }
 
-                // 画线
-                for (int i = 0; i < 4; i++)
-                    cv::line(im2show, detection.pts[i], detection.pts[(i + 1) % 4], colors[2], 2);
+                if (detection.tag_id!=0) {
+                    // 画线
+                    for (int i = 0; i < 4; i++)
+                        cv::line(im2show, detection.pts[i], detection.pts[(i + 1) % 4], colors[2], 2);
 
-                // 画点
-                for(int i=0;i<4;i++)
-                    cv::circle(im2show,detection.pts[i],i*3,cv::Scalar(255,255,255),1);
+                    // 画点
+                    for(int i=0;i<4;i++)
+                        cv::circle(im2show,detection.pts[i],i*3,cv::Scalar(255,255,255),1);
 
-                // 画矩形
-                cv::rectangle(im2show, detection.rect, cv::Scalar(0, 255, 0), 1);
+                    // 画矩形
+                    cv::rectangle(im2show, detection.rect, cv::Scalar(0, 255, 0), 1);
+                    cv::putText(im2show, id2name[detection.tag_id], detection.pts[0], cv::FONT_HERSHEY_SIMPLEX, 1, colors[detection.color_id]);
+                }
 
-                cv::putText(im2show, id2name[detection.tag_id], detection.pts[0], cv::FONT_HERSHEY_SIMPLEX, 1, colors[detection.color_id]);
+                cv::line(im2show,cv::Point2d(0,img_h2),cv::Point2d(img_w2*2,img_h2),cv::Scalar(0,0,255),1);
+                cv::line(im2show,cv::Point2d(img_w2,0),cv::Point2d(img_w2,img_h2*2),cv::Scalar(0,0,255),1);
                 fps_count++;
                 auto t2 = system_clock::now();
                 if (duration_cast<milliseconds>(t2 - t1).count() >= 1000) {
@@ -243,7 +253,7 @@ void find_armor_boxs_run(const string &paras_folder) {
                 // cv::waitKey(1);
             }
         } catch (umt::MessageError_Timeout &e) {
-            LOGW("[WARNING] 'sensor_sub' { %s }",e.what());
+            LOGW("[WARNING] 'sensor_sub___' { %s }",e.what());
             // 似乎不需要做什么
             continue;
         } catch (umt::MessageError &e) {

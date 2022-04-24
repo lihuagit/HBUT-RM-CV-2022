@@ -11,7 +11,7 @@
 #include <chrono>
 using namespace std::chrono;
 
-bool debug=true;
+bool debug=false;
 
 void img_show_raw_run() {
     /*
@@ -32,7 +32,7 @@ void img_show_raw_run() {
             // 似乎不需要做什么
             continue;
         } catch (umt::MessageError &e) {
-            LOGE("[WARNING] 'raw_sub' { %s }",e.what());
+            if(debug) LOGE("[WARNING] 'raw_sub' { %s }",e.what());
             std::this_thread::sleep_for(500ms);
         }
     }
@@ -60,7 +60,7 @@ void img_show_detections_run() {
             // 似乎不需要做什么
             continue;
         } catch (umt::MessageError &e) {
-            LOGE("[WARNING] 'detections_sub' { %s }",e.what());
+            if(debug) LOGE("[WARNING] 'detections_sub' { %s }",e.what());
             std::this_thread::sleep_for(500ms);
         }
     }
@@ -85,7 +85,7 @@ void img_show_light_run() {
             // 似乎不需要做什么
             continue;
         } catch (umt::MessageError &e) {
-            LOGE("[WARNING] 'detections_sub' { %s }",e.what());
+            if(debug) LOGE("[WARNING] 'detections_sub' { %s }",e.what());
             std::this_thread::sleep_for(500ms);
         }
     }

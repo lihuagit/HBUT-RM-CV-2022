@@ -28,6 +28,8 @@ void none_predict_run() {
     umt::Subscriber<Detection_pack> detections_sub("detections_pack");
     auto sensor_param = umt::ObjManager<SensorParam>::find_or_create("sensor_param");
     
+    while( (sensor_param->Tcb).empty() )
+            std::this_thread::sleep_for(500ms);
     const cv::Mat& K = sensor_param->K;
     const cv::Mat& D = sensor_param->D;
     const cv::Mat& Tcb = sensor_param->Tcb;

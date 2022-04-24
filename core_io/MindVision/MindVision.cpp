@@ -58,10 +58,12 @@ bool MindVision::open() {
     int dev_num = 2;
     MV_CHECK_API_ERROR(CameraEnumerateDevice(infos, &dev_num), "");
     MV_ASSERT_ERROR(dev_num > 0, "no device found!");
+    LOGM("dev_num==%d",dev_num);
 
     MV_ASSERT_WARNING(!camera_name.empty(), "camera name is not specified. no name check!");
     for (auto &info : infos) {
-        if (info.acFriendlyName == camera_name) {
+        // 我不理解 可能是因为上交是上下双云台
+        if (info.acFriendlyName == camera_name || true) {
             MV_CHECK_API_ERROR(CameraInit(&info, -1, -1, &handle), "");
             break;
         }
@@ -70,7 +72,9 @@ bool MindVision::open() {
 
     MV_CHECK_API_WARNING(CameraReadParameterFromFile(handle, (char *) camera_cfg.data()),
                          "config file '{}' read error!", camera_cfg);
-    MV_CHECK_API_ERROR(CameraSetTriggerMode(handle, 2), "");
+    // MV_CHECK_API_ERROR(CameraSetTriggerMode(handle, 2), "");
+    MV_CHECK_API_WARNING(CameraSetIspOutFormat(handle, CAMERA_MEDIA_TYPE_BGR8),
+                        "camera to BGR error!!!","");
 
     MV_CHECK_API_ERROR(CameraPlay(handle), "");
 
@@ -105,6 +109,7 @@ bool MindVision::read(cv::Mat &img, double &timestamp_ms) const {
     tSdkFrameHead head;
     BYTE *buffer;
     MV_CHECK_API_ERROR(CameraGetImageBuffer(handle, &head, &buffer, 100), "");
+    // CameraGetImageBuffer(handle, &head, &buffer, 100);
     img = cv::Mat(head.iHeight, head.iWidth, CV_8UC3);
     MV_CHECK_API_ERROR(CameraImageProcess(handle, buffer, img.data, &head), "");
     timestamp_ms = head.uiTimeStamp / 10.;
