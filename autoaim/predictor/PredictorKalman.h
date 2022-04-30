@@ -64,9 +64,10 @@ private:
     // 将世界坐标系内一点，投影到图像中，并绘制该点
     inline void re_project_point(cv::Mat &image, const Eigen::Vector3d &pw,
                                  const Eigen::Matrix3d &R_IW, const cv::Scalar &color) {
-        Eigen::Vector3d pc = pw_to_pc(pw, R_IW);
-        Eigen::Vector3d pu = pc_to_pu(pc);
-        cv::circle(image, {int(pu(0, 0)), int(pu(1, 0))}, 3, color, 2);
+        // Eigen::Vector3d pc = pw_to_pc(pw, R_IW);
+        // Eigen::Vector3d pu = pc_to_pu(pc);
+        Eigen::Vector3d pu = pw;
+        cv::circle(image, {int(pw(0, 0)), int(pw(1, 0))}, 3, color, 2);
     }
 
     // pnp解算:获取相机坐标系内装甲板坐标
@@ -76,6 +77,7 @@ public:
     PredictorKalman();
 
     bool predict(Detection_pack &, RobotCmd &, cv::Mat &);
+    bool predict_2(Detection_pack &, RobotCmd &, cv::Mat &);
 };
 
 

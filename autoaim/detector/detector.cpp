@@ -197,8 +197,13 @@ void find_armor_boxs_run(const string &paras_folder) {
                 for(int i=0;i<4;i++){
                     detection.pts[i].x+=bigger_rect.x-img_w2;
                     detection.pts[i].y+=bigger_rect.y-img_h2;
+                    detection.pts[i].y*=-1;
                 }
 
+                // for(int i=0;i<4;i++){
+                //     detection.pts[i].y+=bigger_rect.y;
+                //     detection.pts[i].x+=bigger_rect.x;
+                // }
                 // 更新tracker
                 tracker = TrackerToUse::create();
                 tracker->init(img, detection.rect);
@@ -219,6 +224,7 @@ void find_armor_boxs_run(const string &paras_folder) {
                 cv::Mat im2show = img.clone();
                 for(int i=0;i<4;i++){
                     detection.pts[i].x+=img_w2;
+                    detection.pts[i].y*=-1;
                     detection.pts[i].y+=img_h2;
                 }
 

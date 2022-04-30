@@ -95,7 +95,7 @@ void predict_run() {
             if(!ok) {
                 std::this_thread::sleep_for(500ms);
             }
-
+            cv::imshow("pre",im2show);
             robot_cmd_pub.push(robot_cmd);
         } catch (umt::MessageError_Timeout &e) {
             // RobotCmd robot_cmd;  // TODO

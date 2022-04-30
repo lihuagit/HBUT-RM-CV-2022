@@ -19,7 +19,8 @@ int main(){
     background_sensors_io_auto_restart("camera_1",PROJECT_DIR"/asset/armor_lihua_3.config",PROJECT_DIR"/asset/camera-param.yml","USB VID:PID=0483:5740 SNR=207233AB374E",10);
     // background_find_light_blobs_run();
     background_find_armor_boxs_run(PROJECT_DIR"/asset/para/");
-    background_none_predict_run();
+    // background_none_predict_run();
+    background_predict_run();
     // background_find_armor_boxs_run(PROJECT_DIR"/asset/123svm.xml");
     background_img_show_run();
     // background_none_predict_run();
