@@ -21,6 +21,7 @@ int main(){
     background_find_armor_boxs_run(PROJECT_DIR"/asset/para/");
     // background_none_predict_run();
     background_predict_run();
+    background_robot_io_usb_auto_restart("USB VID:PID=0483:5740 SNR=207233AB374E");
     // background_find_armor_boxs_run(PROJECT_DIR"/asset/123svm.xml");
     background_img_show_run();
     // background_none_predict_run();

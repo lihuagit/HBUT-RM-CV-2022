@@ -234,8 +234,12 @@ bool PredictorKalman::predict(Detection_pack &data, RobotCmd &send, cv::Mat &im2
     double s_pitch = atan(s_pc(1, 0) / s_pc(2, 0)) / M_PI * 180.;
     // 绘制角度波形图
 
-	send.yaw_angle = (float) s_yaw;
-	send.pitch_angle = (float) s_pitch;
+    
+    float x = (armor.pts[0].x + armor.pts[1].x + armor.pts[2].x + armor.pts[3].x) / 4.f;
+    float y = (armor.pts[0].y + armor.pts[1].y + armor.pts[2].y + armor.pts[3].y) / 4.f;
+
+	send.yaw_angle = (float) mc_yaw+q_[0];
+	send.pitch_angle = (float) y;
 	send.yaw_speed = c_speed;
     std::cout << "s_pitch: " << s_pitch << std::endl;
 	

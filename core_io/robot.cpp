@@ -26,15 +26,28 @@ void robot_cmd_loop(Serial &robot_port, const bool &required_stop, bool &is_ok) 
      * 将收到的数据统一发送出去
      */
     if (debug) std::cout << "============robot_cmd_loop===========\n";
-    umt::Subscriber<RobotCmd> robot_cmd_sub("robot_cmd", 0);
+    umt::Subscriber<RobotCmd> robot_cmd_sub("robot_cmd");
     while (!required_stop) {
         try {
             auto robot_cmd = robot_cmd_sub.pop();
             // for(auto *ptr=(uint8_t*)&robot_cmd.priority; ptr < &robot_cmd.lrc; ptr++){
             //     robot_cmd.lrc += *ptr;
             // }
+            float x=robot_cmd.yaw_angle;
+            int16_t y=robot_cmd.pitch_angle;
+            int16_t z=robot_cmd.distance;
+            
+            uint8_t buff[10];
+            buff[0] = 's';
+            float test = x;
+            memcpy(buff + 1, &test, 4);
+            // printf("data: %f\n", *(float*)(buff + 1));
+            *((uint16_t*)(buff + 5)) = y;
+            *((uint16_t*)(buff + 7)) = z;
+            buff[9] = 'e';
             try {
-                robot_port.write((uint8_t *) &robot_cmd, sizeof(RobotCmd));
+                // robot_port.write((uint8_t *) &robot_cmd, sizeof(RobotCmd));
+                robot_port.write(buff,sizeof buff);
             } catch (SerialException &e) {
                 LOGE("[ERROR] { %s }", e.what());
                 is_ok = false;
@@ -65,7 +78,6 @@ bool robot_io_usb(const std::string &robot_usb_hid = "") {
             break;
         }
     }
-
 
     robot_port.open();
     if (!robot_port.isOpen()) {

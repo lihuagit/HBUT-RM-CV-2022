@@ -90,8 +90,9 @@ void predict_run() {
             auto detections = detections_sub.pop_for(50);
             RobotCmd robot_cmd;
             cv::Mat im2show;
-            bool ok = predictor.predict(detections, robot_cmd, im2show);
-
+            // bool ok = predictor.predict(detections, robot_cmd, im2show);
+            bool ok = predictor.predict_2(detections, robot_cmd, im2show);
+            
             if(!ok) {
                 std::this_thread::sleep_for(500ms);
             }
